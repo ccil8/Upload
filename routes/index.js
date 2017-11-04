@@ -15,21 +15,22 @@ router.get('/monupload', function(req, res, next) {
 
 router.post('/monupload', upload.array('monfichier'), function(req, res, next) {
   // traitement du formulaire 
-    fs.rename(req.files[10].path, 'tmp/' + req.files[10].originalname, function(){});
-  
-    if ((req.files[10].mimetype == 'image/png') && (req.files[10].size < 3145728)){
-      fs.rename('tmp/' + req.files[10].originalname, 'public/images/' + req.files[10].originalname, function(){});
-      
-      res.send('Success');
-    }else{
-      
-      fs.unlink(req.files[10].path, function(){});
-        res.send('Erreur');	
-      }
-  
+  //fs.rename(req.files[10].path, 'tmp/' + req.files[10].originalname, function(){});
+  for (i = 0; i < req.files.length; i++) {  
+    if ((req.files[i].mimetype =='image/png') && (req.files[i].size < 3145728))  {
+      fs.rename('tmp/' + req.files[i].path, 'public/images/' + req.files[i].originalname, function(){
+        res.send('Sucess');
+      });
+    } else {
+      fs.unlink(req.files[i].path, function() {
+        res.send('Error');
+      }); 
+  }
+} 
 });
 
 module.exports = router;
+
 
 /*block content
 h1= title
